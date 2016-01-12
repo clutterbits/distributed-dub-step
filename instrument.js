@@ -1,17 +1,35 @@
 import Wad from './bower_components/Wad/src/wad'
 
-var hat = new Wad(Wad.presets.hiHatClosed);
+/** Instruments **/
+
+let hat = Wad.presets.hiHatClosed
 hat.globalReverb = true;
 
-var hato = new Wad(Wad.presets.hiHatOpen);
+let hato = Wad.presets.hiHatOpen
 hato.globalReverb = true;
 
-var kick = new Wad(Wad.presets.snare);
+let kick = Wad.presets.snare
 kick.globalReverb = true;
 
-var ghost = new Wad(Wad.presets.ghost)
+let ghost = Wad.presets.ghost
 
-var synth = new Wad({
+let snare = {
+    source: 'noise',
+    volume: 0.1,
+    panning : 0,
+    env: {
+        attack: 0.01,
+        hold: 0.35,
+        filter: {
+            type: 'lowpass',
+            frequency: 150,
+            q: 0.115
+        }
+    }
+}
+snare.globalReverb = true;
+
+let synth = {
     source: 'square',
     volume: 0.5,
     env: {
@@ -30,9 +48,9 @@ var synth = new Wad({
             frequency: 600
         }
     }
-});
+}
 
-let bass = new Wad({
+let bass = {
     source : 'sine',
     pitch : 'C2',
     env : {
@@ -42,9 +60,13 @@ let bass = new Wad({
         hold : .4,
         release : .1
     }
-})
+}
+
+/** VARIABLES **/
 
 let instruments = [hat, synth, synth, ghost, bass]
+
+/** FUNCTIONS **/
 
 let randomInstrument = () => {
     return instruments[Math.floor(Math.random()*instruments.length)]
@@ -61,4 +83,6 @@ let random = (i) => {
     return list
 }
 
-export { random, bass, hat, hato, kick, synth }
+/** EXPORTS **/
+
+export { random, bass, hat, hato, kick, synth, snare }
