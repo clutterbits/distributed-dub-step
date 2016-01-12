@@ -31,8 +31,7 @@ let playRandomInstrument = (inst) => {
         })
 }
 
-Wad.setGlobalReverb({impulse : '/widehall.wav', wet : .5})
-
+Wad.setGlobalReverb({impulse : 'widehall.wav', wet : .5})
 
 class DistributedDubStep extends React.Component {
     constructor(props) {
