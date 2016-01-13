@@ -1,19 +1,26 @@
-import Wad from './bower_components/Wad/src/wad'
+import assign    from 'object.assign'
+import Wad       from './bower_components/Wad/src/wad'
+import synthIcon from './icons/synth1.svg' 
+import bassIcon  from './icons/bass1.svg' 
+import ghostIcon from './icons/ghost.svg' 
+import hatIcon   from './icons/hihat.svg' 
+import kickIcon  from './icons/kick.svg' 
 
 /** Instruments **/
 
-let hat = Wad.presets.hiHatClosed
+let hat = assign({}, Wad.presets.hiHatClosed, { type : 'hat' })
 hat.globalReverb = true;
 
-let hato = Wad.presets.hiHatOpen
+let hato = assign({}, Wad.presets.hiHatOpen, { type : 'hato' })
 hato.globalReverb = true;
 
-let kick = Wad.presets.snare
+let kick = assign({}, Wad.presets.snare, { type : 'kick' })
 kick.globalReverb = true;
 
-let ghost = Wad.presets.ghost
+let ghost = assign({}, Wad.presets.ghost, { type : 'ghost' })
 
 let snare = {
+    type : 'snare',
     source: 'noise',
     volume: 0.1,
     panning : 0,
@@ -30,6 +37,7 @@ let snare = {
 snare.globalReverb = true;
 
 let synth = {
+    type: 'synth',
     source: 'square',
     volume: 0.5,
     env: {
@@ -51,6 +59,7 @@ let synth = {
 }
 
 let bass = {
+    type : 'bass',
     source : 'sine',
     pitch : 'C2',
     env : {
@@ -65,6 +74,12 @@ let bass = {
 /** VARIABLES **/
 
 let instruments = [hat, synth, synth, ghost, bass]
+let instrumentIcons = {
+    'hat'   : hatIcon,
+    'synth' : synthIcon,
+    'ghost' : ghostIcon,
+    'bass'  : bassIcon 
+}
 
 /** FUNCTIONS **/
 
@@ -83,6 +98,8 @@ let random = (i) => {
     return list
 }
 
+let ins
+
 /** EXPORTS **/
 
-export { random, bass, hat, hato, kick, synth, snare }
+export { random, bass, hat, hato, kick, synth, snare, instrumentIcons }

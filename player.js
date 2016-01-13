@@ -4,16 +4,20 @@ import Firebase    from 'firebase/lib/firebase-web'
 import Shake       from 'shake.js'
 import Svg         from '@asbjornenge/react-svg'
 import { random }  from './instrument'
+import { instrumentIcons }  from './instrument'
 import playerStyle from './player.styl'
 import babysad     from './icons/babysad.svg'
 import babysmile   from './icons/babysmile.svg'
 import babyhappy   from './icons/babyhappy.svg'
 import babylove    from './icons/babylove.svg'
+import trooper     from './icons/trooper.svg'
 
 let firebase = new Firebase('https://distributed-dub-step.firebaseio.com/instruments')
 let instrument = random()
 let _instrument = firebase.push(instrument)
 _instrument.onDisconnect().remove()
+
+console.log(instrument.type)
 
 let myshake = new Shake({
     threshold: 10, // optional shake strength threshold
@@ -37,8 +41,11 @@ class DistributedDubStepPlayer extends React.Component {
         return (
             <div className="DistributedDubStepPlayer">
                 <style>{playerStyle}</style>
-                <div className="baby">
-                    <Svg svg={baby} />
+                <div className="mask">
+                    <Svg svg={trooper} />
+                </div>
+                <div className={"instrument "+instrument.type}>
+                    <Svg svg={instrumentIcons[instrument.type]} />
                 </div>
             </div>
         )
