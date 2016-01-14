@@ -36,6 +36,7 @@ class DistributedDubStep extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            mute : false,
             allowRemote : true,
             randomInstruments : [],
             remoteInstruments : []
@@ -46,6 +47,11 @@ class DistributedDubStep extends React.Component {
             <div className="DistributedDubStep">
                 <style>{receiverStyle}</style>
                 <div className="controls">
+                    <div className="numRandom">
+                        <button onClick={this.toggleMute.bind(this)}>
+                            { this.state.mute ? 'UnMute' : 'Mute'}
+                        </button>
+                    </div>
                     <div className="numRandom">
                         Number of random: {this.state.randomInstruments.length}
                         <button onClick={this.addRandom.bind(this)}>+</button>
@@ -64,6 +70,9 @@ class DistributedDubStep extends React.Component {
     }
     toggleRemote() {
         this.setState({ allowRemote : !this.state.allowRemote })
+    }
+    toggleMute() {
+        this.setState({ mute : !this.state.mute })
     }
     addRandom() {
         let rand = random(1)
@@ -100,6 +109,7 @@ class DistributedDubStep extends React.Component {
         })
     }
     loop() {
+        if (this.state.mute) return
         // Base beat
         beatBase.play({
             wait: beat * 0
