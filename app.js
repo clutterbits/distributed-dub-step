@@ -1349,36 +1349,20 @@ var kickIcon = _interopRequire(require("./icons/kick.svg"));
 
 /** Instruments **/
 
-var hat = assign({}, Wad.presets.hiHatClosed, { type: "hat" });
-hat.globalReverb = true;
-
-var hato = assign({}, Wad.presets.hiHatOpen, { type: "hato" });
-hato.globalReverb = true;
-
-var kick = assign({}, Wad.presets.snare, { type: "kick" });
-kick.globalReverb = true;
-
-var ghost = assign({}, Wad.presets.ghost, { type: "ghost" });
-
-var snare = {
-    type: "snare",
-    source: "noise",
-    volume: 0.1,
-    panning: 0,
-    env: {
-        attack: 0.01,
-        hold: 0.35,
-        filter: {
-            type: "lowpass",
-            frequency: 150,
-            q: 0.115
-        }
-    }
-};
-snare.globalReverb = true;
+var kick = assign({ source: "kick.wav", type: "kick", probability: 100 });
+var snare = assign({ source: "snare.wav", type: "snare", probability: 20 });
+var clap = assign({ source: "clap.wav", type: "clap", probability: 50 });
+var ghost = assign({ source: "ghost.wav", type: "ghost", probability: 5 });
+var flash = assign({ source: "flash.wav", type: "flash", probability: 5 });
+var stomp = assign({ source: "stomp.wav", type: "stomp", probability: 50 });
+var woosh = assign({ source: "woosh.wav", type: "woosh", probability: 30 });
+var write = assign({ source: "twrit.wav", type: "write", probability: 50 });
+//snare.globalReverb = true;
 
 var synth = {
     type: "synth",
+    probability: 50,
+    pitch: "C5",
     source: "square",
     volume: 0.5,
     env: {
@@ -1398,23 +1382,19 @@ var synth = {
         }
     }
 };
-
-var bass = {
-    type: "bass",
-    source: "sine",
-    pitch: "C2",
-    env: {
-        attack: 0.02,
-        decay: 0.1,
-        sustain: 0.9,
-        hold: 0.4,
-        release: 0.1
-    }
-};
+synth.globalReverb = true;
 
 /** VARIABLES **/
 
-var instruments = [hat, synth, synth, ghost, bass];
+var instruments = [synth, kick, clap, woosh, flash, stomp, write];
+var instrumentSpread = [];
+instruments.forEach(function (i) {
+    var j = i.probability;
+    while (j > 0) {
+        instrumentSpread.push(i);
+        j--;
+    }
+});
 var instrumentIcons = {
     hat: hatIcon,
     synth: synthIcon,
@@ -1425,7 +1405,7 @@ var instrumentIcons = {
 /** FUNCTIONS **/
 
 var randomInstrument = function () {
-    return instruments[Math.floor(Math.random() * instruments.length)];
+    return instrumentSpread[Math.floor(Math.random() * instrumentSpread.length)];
 };
 
 var random = function (i) {
@@ -1439,16 +1419,9 @@ var random = function (i) {
     return list;
 };
 
-var ins = undefined;
-
 /** EXPORTS **/
 
 exports.random = random;
-exports.bass = bass;
-exports.hat = hat;
-exports.hato = hato;
-exports.kick = kick;
-exports.synth = synth;
 exports.snare = snare;
 exports.instrumentIcons = instrumentIcons;
 Object.defineProperty(exports, "__esModule", {
@@ -21297,10 +21270,7 @@ var Svg = _interopRequire(require("@asbjornenge/react-svg"));
 
 var Style = _interopRequire(require("@asbjornenge/react-style"));
 
-var _instrument2 = require("./instrument");
-
-var random = _instrument2.random;
-var instrumentIcons = _instrument2.instrumentIcons;
+var random = require("./instrument").random;
 var playerStyle = _interopRequire(require("./player.styl"));
 
 var babysad = _interopRequire(require("./icons/babysad.svg"));
@@ -21350,11 +21320,6 @@ var DistributedDubStepPlayer = (function (_React$Component) {
                         "div",
                         { className: "mask" },
                         React.createElement(Svg, { className: "baby", svg: baby })
-                    ),
-                    React.createElement(
-                        "div",
-                        { className: "instrument " + instrument.type },
-                        React.createElement(Svg, { svg: instrumentIcons[instrument.type] })
                     )
                 );
             },
@@ -21419,7 +21384,7 @@ document.body.appendChild(container);
 ReactDOM.render(React.createElement(DistributedDubStepPlayer, null), container);
 
 },{"./icons/babyhappy.svg":2,"./icons/babylove.svg":3,"./icons/babysad.svg":4,"./icons/babysmile.svg":5,"./instrument":11,"./player.styl":184,"@asbjornenge/react-style":12,"@asbjornenge/react-svg":13,"firebase/lib/firebase-web":14,"react":181,"react-dom":25,"shake.js":182}],184:[function(require,module,exports){
-module.exports="body {\n  color: #ffc0cb;\n  padding: 0;\n  margin: 0;\n}\n.DistributedDubStepPlayer {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  display: flex;\n  flex-direction: column;\n  background: rgba(14,39,68,0.8);\n}\n.DistributedDubStepPlayer:after {\n  content: \"\";\n  position: absolute;\n  opacity: 0.5;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: url(\"nyancat.gif\") no-repeat;\n  background-size: cover;\n  z-index: -1;\n}\n.DistributedDubStepPlayer .mask {\n  margin: auto;\n  margin-top: 100px;\n  height: 60%;\n  width: 60%;\n  position: relative;\n}\n.DistributedDubStepPlayer .mask .trooper {\n  position: absolute;\n  width: 100%;\n  width: 100%;\n  z-index: 10;\n  background-color: #f00;\n  transform: translateY(-500px);\n}\n.DistributedDubStepPlayer .mask .baby {\n  position: absolute;\n  width: 100%;\n  width: 100%;\n  z-index: 9;\n}\n.DistributedDubStepPlayer .mask .baby svg {\n  fill: #fff;\n}\n.DistributedDubStepPlayer .mask .baby svg .heart {\n  fill: #f00;\n}\n.DistributedDubStepPlayer .instrument {\n  margin: auto;\n  height: 40%;\n  width: 40%;\n}\n.DistributedDubStepPlayer .instrument svg {\n  fill: #fff;\n}\n.DistributedDubStepPlayer .instrument.bass {\n  transform: rotate(45deg);\n}\n.DistributedDubStepPlayer .instrument.bass svg {\n  margin-top: -30%;\n  margin-left: -30%;\n  width: 130%;\n}\n.DistributedDubStepPlayer .shakeDelta {\n  width: 100px;\n  height: 100px;\n  margin-top: 50px;\n  font-size: 60em;\n}\n"
+module.exports="body {\n  color: #ffc0cb;\n  padding: 0;\n  margin: 0;\n}\n.DistributedDubStepPlayer {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  display: flex;\n  flex-direction: column;\n  background: rgba(14,39,68,0.8);\n}\n.DistributedDubStepPlayer:after {\n  content: \"\";\n  position: absolute;\n  opacity: 0.5;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: url(\"nyancat.gif\") no-repeat;\n  background-size: cover;\n  z-index: -1;\n}\n.DistributedDubStepPlayer .mask {\n  margin: auto;\n  width: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.DistributedDubStepPlayer .mask .baby {\n  width: 80%;\n}\n.DistributedDubStepPlayer .mask .baby svg {\n  fill: #fff;\n}\n.DistributedDubStepPlayer .mask .baby svg .heart {\n  fill: #f00;\n}\n.DistributedDubStepPlayer .shakeDelta {\n  width: 100px;\n  height: 100px;\n  margin-top: 50px;\n  font-size: 60em;\n}\n"
 },{}],185:[function(require,module,exports){
 // shim for using process in browser
 
