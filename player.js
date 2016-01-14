@@ -42,7 +42,7 @@ class DistributedDubStepPlayer extends React.Component {
             <div className="DistributedDubStepPlayer">
                 <style>{playerStyle}</style>
                 <div className="mask">
-                    <Svg svg={trooper} />
+                    <Svg className="baby" svg={baby} />
                 </div>
                 <div className={"instrument "+instrument.type}>
                     <Svg svg={instrumentIcons[instrument.type]} />
