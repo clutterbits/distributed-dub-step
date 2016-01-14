@@ -14,12 +14,16 @@ hat.globalReverb = true;
 let hato = assign({}, Wad.presets.hiHatOpen, { type : 'hato' })
 hato.globalReverb = true;
 
-let kick = assign({}, Wad.presets.snare, { type : 'kick' })
-kick.globalReverb = true;
+let kick = assign({ source: 'kick.wav', type : 'kick' })
+//kick.globalReverb = true;
 
 let ghost = assign({}, Wad.presets.ghost, { type : 'ghost' })
 
-let snare = {
+let snare = assign({ source: 'snare.wav', type : 'snare' })
+//snare.globalReverb = true;
+
+
+let snareOld = {
     type : 'snare',
     source: 'noise',
     volume: 0.1,
@@ -34,10 +38,11 @@ let snare = {
         }
     }
 }
-snare.globalReverb = true;
+snareOld.globalReverb = true;
 
 let synth = {
     type: 'synth',
+    pitch: 'C5',
     source: 'square',
     volume: 0.5,
     env: {
@@ -57,6 +62,7 @@ let synth = {
         }
     }
 }
+synth.globalReverb = true
 
 let bass = {
     type : 'bass',
@@ -73,7 +79,7 @@ let bass = {
 
 /** VARIABLES **/
 
-let instruments = [hat, synth, synth, ghost, bass]
+let instruments = [synth, synth, kick]
 let instrumentIcons = {
     'hat'   : hatIcon,
     'synth' : synthIcon,

@@ -13,6 +13,7 @@ let beat    = seconds/bpm
 let pattern = 8
 let allowedBeatSegments = [1,2.25,2.5,2.75,3.5,5,6.95]
 let beatBase = new Wad(snare)
+//beatBase.setVolume(0.1)
 let pickRandomBeatSegment = () => {
     let skew = parseFloat(Math.random().toFixed(2))/10
     return allowedBeatSegments[Math.floor(Math.random()*allowedBeatSegments.length)]+skew
