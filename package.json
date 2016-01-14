@@ -12,6 +12,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
+    "@asbjornenge/react-style": "^1.0.1",
     "@asbjornenge/react-svg": "^1.0.0",
     "firebase": "^2.3.2",
     "imgurify": "^1.2.2",

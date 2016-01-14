@@ -3,6 +3,7 @@ import ReactDOM    from 'react-dom'
 import Firebase    from 'firebase/lib/firebase-web'
 import Shake       from 'shake.js'
 import Svg         from '@asbjornenge/react-svg'
+import Style       from '@asbjornenge/react-style'
 import { random }  from './instrument'
 import { instrumentIcons }  from './instrument'
 import playerStyle from './player.styl'
@@ -40,7 +41,7 @@ class DistributedDubStepPlayer extends React.Component {
         if (largestDelta > 50) baby = babylove
         return (
             <div className="DistributedDubStepPlayer">
-                <style>{playerStyle}</style>
+                <Style style={playerStyle} />
                 <div className="mask">
                     <Svg className="baby" svg={baby} />
                 </div>
