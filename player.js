@@ -17,8 +17,6 @@ let instrument = random()
 let _instrument = firebase.push(instrument)
 _instrument.onDisconnect().remove()
 
-console.log(instrument.type)
-
 let myshake = new Shake({
     threshold: 10, // optional shake strength threshold
     timeout: 100 // optional, determines the frequency of event generation
@@ -71,6 +69,9 @@ class DistributedDubStepPlayer extends React.Component {
         },0)
         this.shakeDeltas = []
         this.setState({ shakeValue : shakeValue }) 
+    }
+    componentDidUpdate() {
+        _instrument.update({ volume : this.state.shakeValue/100})
     }
     componentDidMount() {
         this.shakeDeltas = []

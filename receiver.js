@@ -18,17 +18,16 @@ let pickRandomBeatSegment = () => {
     return allowedBeatSegments[Math.floor(Math.random()*allowedBeatSegments.length)]+skew
 }
 let playRandomInstrument = (inst) => {
-    if (!inst) return
-    if (inst.source == 'square')
-        inst.play({
-            volume : 0.1,
-            wait: beat * pickRandomBeatSegment(), 
-            pitch : ['C5','C7'][Math.floor(Math.random()*2)]
-        })
-    else
-        inst.play({
-            wait: beat * pickRandomBeatSegment() 
-        })
+    if (!inst.wad) return
+    inst.wad.play({
+        wait: beat * pickRandomBeatSegment() 
+    })
+//    if (inst.wad.source == 'square')
+//        inst.wad.play({
+//            wait: beat * pickRandomBeatSegment(), 
+//            pitch : ['C5','C7'][Math.floor(Math.random()*2)]
+//        })
+//    else
 }
 
 Wad.setGlobalReverb({impulse : 'widehall.wav', wet : .5})
@@ -83,6 +82,7 @@ class DistributedDubStep extends React.Component {
             id  : id,
             wad : new Wad(inst)
         }
+        remoteInstrument.wad.setVolume(0)
         this.state.remoteInstruments.push(remoteInstrument)
         this.forceUpdate() 
     }
@@ -90,8 +90,14 @@ class DistributedDubStep extends React.Component {
         this.state.remoteInstruments = this.state.remoteInstruments.filter(inst => {
             return inst.id != id
         })
-        console.log(this.state.remoteInstruments)
         this.forceUpdate()
+    }
+    updateRemote(id, update) {
+        this.state.remoteInstruments.forEach(inst => {
+            if (inst.id == id) {
+                inst.wad.setVolume(parseFloat(update.volume.toFixed(2)))
+            }
+        })
     }
     loop() {
         // Base beat
@@ -109,12 +115,12 @@ class DistributedDubStep extends React.Component {
         })
         // Randomize
         this.state.randomInstruments.forEach(inst => {
-            playRandomInstrument(inst.wad)
+            playRandomInstrument(inst)
         })
         // Randomize remote
         if (!this.state.allowRemote) return
         this.state.remoteInstruments.forEach(inst => {
-            playRandomInstrument(inst.wad)
+            playRandomInstrument(inst)
         })
     }
     componentDidMount() {
@@ -125,7 +131,7 @@ class DistributedDubStep extends React.Component {
             this.delRemote(snap.key())
         })
         firebase.on('child_changed', (snap) => {
-            console.log('changed', snap.val())
+            this.updateRemote(snap.key(), snap.val())
         })
         this.loop()
         setInterval(this.loop.bind(this), Math.floor(beat * pattern * 1000))
