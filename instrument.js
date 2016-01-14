@@ -8,40 +8,19 @@ import kickIcon  from './icons/kick.svg'
 
 /** Instruments **/
 
-let hat = assign({}, Wad.presets.hiHatClosed, { type : 'hat' })
-hat.globalReverb = true;
-
-let hato = assign({}, Wad.presets.hiHatOpen, { type : 'hato' })
-hato.globalReverb = true;
-
-let kick = assign({ source: 'kick.wav', type : 'kick' })
-//kick.globalReverb = true;
-
-let ghost = assign({}, Wad.presets.ghost, { type : 'ghost' })
-
-let snare = assign({ source: 'snare.wav', type : 'snare' })
+let kick  = assign({ source: 'kick.wav',  type : 'kick',  probability : 100 })
+let snare = assign({ source: 'snare.wav', type : 'snare', probability : 20 })
+let clap  = assign({ source: 'clap.wav',  type : 'clap',  probability : 50 })
+let ghost = assign({ source: 'ghost.wav', type : 'ghost', probability : 5 })
+let flash = assign({ source: 'flash.wav', type : 'flash', probability : 5 })
+let stomp = assign({ source: 'stomp.wav', type : 'stomp', probability : 50 })
+let woosh = assign({ source: 'woosh.wav', type : 'woosh', probability : 30 })
+let write = assign({ source: 'twrit.wav', type : 'write', probability : 50 })
 //snare.globalReverb = true;
-
-
-let snareOld = {
-    type : 'snare',
-    source: 'noise',
-    volume: 0.1,
-    panning : 0,
-    env: {
-        attack: 0.01,
-        hold: 0.35,
-        filter: {
-            type: 'lowpass',
-            frequency: 150,
-            q: 0.115
-        }
-    }
-}
-snareOld.globalReverb = true;
 
 let synth = {
     type: 'synth',
+    probability : 50,
     pitch: 'C5',
     source: 'square',
     volume: 0.5,
@@ -64,22 +43,17 @@ let synth = {
 }
 synth.globalReverb = true
 
-let bass = {
-    type : 'bass',
-    source : 'sine',
-    pitch : 'C2',
-    env : {
-        attack : .02,
-        decay : .1,
-        sustain : .9,
-        hold : .4,
-        release : .1
-    }
-}
-
 /** VARIABLES **/
 
-let instruments = [synth, synth, kick]
+let instruments = [synth, kick, clap, woosh, flash, stomp, write]
+let instrumentSpread = []
+instruments.forEach(i => {
+    let j = i.probability
+    while(j>0) {
+        instrumentSpread.push(i)
+        j--
+    }
+})
 let instrumentIcons = {
     'hat'   : hatIcon,
     'synth' : synthIcon,
@@ -90,7 +64,7 @@ let instrumentIcons = {
 /** FUNCTIONS **/
 
 let randomInstrument = () => {
-    return instruments[Math.floor(Math.random()*instruments.length)]
+    return instrumentSpread[Math.floor(Math.random()*instrumentSpread.length)]
 }
 
 let random = (i) => {
@@ -104,8 +78,6 @@ let random = (i) => {
     return list
 }
 
-let ins
-
 /** EXPORTS **/
 
-export { random, bass, hat, hato, kick, synth, snare, instrumentIcons }
+export { random, snare, instrumentIcons }

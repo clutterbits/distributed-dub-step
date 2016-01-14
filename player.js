@@ -5,7 +5,6 @@ import Shake       from 'shake.js'
 import Svg         from '@asbjornenge/react-svg'
 import Style       from '@asbjornenge/react-style'
 import { random }  from './instrument'
-import { instrumentIcons }  from './instrument'
 import playerStyle from './player.styl'
 import babysad     from './icons/babysad.svg'
 import babysmile   from './icons/babysmile.svg'
@@ -41,9 +40,6 @@ class DistributedDubStepPlayer extends React.Component {
                 <Style style={playerStyle} />
                 <div className="mask">
                     <Svg className="baby" svg={baby} />
-                </div>
-                <div className={"instrument "+instrument.type}>
-                    <Svg svg={instrumentIcons[instrument.type]} />
                 </div>
             </div>
         )

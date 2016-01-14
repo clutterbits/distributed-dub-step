@@ -20,15 +20,15 @@ let pickRandomBeatSegment = () => {
 }
 let playRandomInstrument = (inst) => {
     if (!inst.wad) return
+    if (inst.type == 'synth') {
+        return inst.wad.play({
+            wait: beat * pickRandomBeatSegment(),
+            pitch: ['C5','C7'][Math.floor(Math.random()*2)]
+        })
+    }
     inst.wad.play({
         wait: beat * pickRandomBeatSegment() 
     })
-//    if (inst.wad.source == 'square')
-//        inst.wad.play({
-//            wait: beat * pickRandomBeatSegment(), 
-//            pitch : ['C5','C7'][Math.floor(Math.random()*2)]
-//        })
-//    else
 }
 
 Wad.setGlobalReverb({impulse : 'widehall.wav', wet : .5})
@@ -78,7 +78,8 @@ class DistributedDubStep extends React.Component {
     addRandom() {
         let rand = random(1)
         let randomInstrument = {
-            wad : new Wad(rand[0])
+            type : rand[0].type, 
+            wad  : new Wad(rand[0])
         }
         this.state.randomInstruments.push(randomInstrument)
         this.forceUpdate() 
@@ -89,8 +90,9 @@ class DistributedDubStep extends React.Component {
     }
     addRemote(id, inst) {
         let remoteInstrument = {
-            id  : id,
-            wad : new Wad(inst)
+            id   : id,
+            type : inst.type,
+            wad  : new Wad(inst)
         }
         remoteInstrument.wad.setVolume(0)
         this.state.remoteInstruments.push(remoteInstrument)
