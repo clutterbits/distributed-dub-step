@@ -11,7 +11,6 @@ import babysad     from './icons/babysad.svg'
 import babysmile   from './icons/babysmile.svg'
 import babyhappy   from './icons/babyhappy.svg'
 import babylove    from './icons/babylove.svg'
-import trooper     from './icons/trooper.svg'
 
 let firebase = new Firebase('https://distributed-dub-step.firebaseio.com/instruments')
 let instrument = random()
