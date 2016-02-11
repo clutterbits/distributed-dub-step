@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "budo receiver.js -- -t babelify -t stylusify -t imgurify",
+    "start-player": "budo player.js --host 0.0.0.0 --port 9955 --live -- -t babelify -t stylusify -t imgurify",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "browserify -t babelify -t imgurify -t stylusify player.js > dist/app.js",
     "deploy": "gh-pages -d dist"
@@ -23,6 +25,7 @@
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
     "shake.js": "^1.2.2",
-    "stylusify": "^2.1.0"
+    "stylusify": "^2.1.0",
+    "underscore": "^1.8.3"
   }
 }
