@@ -1,6 +1,7 @@
 import React             from 'react'
 import ReactDOM          from 'react-dom'
 import Firebase          from 'firebase/lib/firebase-web'
+import _                 from 'underscore'
 import receiverStyle     from './receiver.styl'
 import Wad               from './bower_components/Wad/src/wad'
 import { random, snare } from './instrument'
@@ -12,22 +13,29 @@ let seconds = 60
 let beat    = seconds/bpm
 let pattern = 8
 let allowedBeatSegments = [1,2.25,2.5,2.75,3.5,5,6.95]
+let takenSegments = []
 let beatBase = new Wad(snare)
 //beatBase.setVolume(0.1)
-let pickRandomBeatSegment = () => {
+let pickRandomBeatSegmentWithSkew = () => {
     let skew = parseFloat(Math.random().toFixed(2))/10
     return allowedBeatSegments[Math.floor(Math.random()*allowedBeatSegments.length)]+skew
 }
+let pickRandomBeatSegment = () => {
+    return allowedBeatSegments[Math.floor(Math.random()*allowedBeatSegments.length)]
+}
 let playRandomInstrument = (inst) => {
     if (!inst.wad) return
+    let segment = pickRandomBeatSegment()
+    if (takenSegments.indexOf(segment) >= 0) return
+    takenSegments.push(segment)
     if (inst.type == 'synth') {
         return inst.wad.play({
-            wait: beat * pickRandomBeatSegment(),
+            wait: beat * segment,
             pitch: ['C5','C7'][Math.floor(Math.random()*2)]
         })
     }
     inst.wad.play({
-        wait: beat * pickRandomBeatSegment() 
+        wait: beat * segment
     })
 }
 
@@ -113,6 +121,7 @@ class DistributedDubStep extends React.Component {
     }
     loop() {
         if (this.state.mute) return
+        takenSegments = []
         // Base beat
         beatBase.play({
             wait: beat * 0
@@ -127,14 +136,18 @@ class DistributedDubStep extends React.Component {
             wait: beat * 6
         })
         // Randomize
-        this.state.randomInstruments.forEach(inst => {
-            playRandomInstrument(inst)
-        })
-        // Randomize remote
-        if (!this.state.allowRemote) return
-        this.state.remoteInstruments.forEach(inst => {
-            playRandomInstrument(inst)
-        })
+        if (!this.state.allowRemote) {
+            this.state.randomInstruments
+                .forEach(inst => {
+                    playRandomInstrument(inst)
+                })
+        } else {
+            this.state.randomInstruments.concat(this.state.remoteInstruments)
+                .forEach(inst => {
+                    playRandomInstrument(inst)
+                })
+
+        } 
     }
     componentDidMount() {
         firebase.on('child_added', (snap) => {
